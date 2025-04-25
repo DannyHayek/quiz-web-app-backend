@@ -8,8 +8,9 @@ $login = false;
 
 $sql = $connection->query("SELECT * FROM users WHERE username = $user AND password = $pass");
 
-if ($sql != null){
-    $return = $sql->fetch(PDO::FETCH_ASSOC);
+$return = $sql->fetch(PDO::FETCH_ASSOC);
+
+if ($return){
     echo json_encode($return);
     echo "\nLogged in as $user!";
 } else {

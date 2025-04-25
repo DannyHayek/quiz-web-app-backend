@@ -6,13 +6,19 @@ $user = $_POST["user"];
 $pass = $_POST["pass"];
 $login = false;
 
-$sql = $connection->query("SELECT * FROM users WHERE username = $user AND password = $pass");
+try {
 
-$return = $sql->fetch(PDO::FETCH_ASSOC);
+    $sql = $connection->query("SELECT * FROM users WHERE username = $user AND password = $pass");
 
-if ($return){
-    echo json_encode($return);
-    echo "\nLogged in as $user!";
-} else {
-    echo "\nThis user does not exist!";
+    $return = $sql->fetch(PDO::FETCH_ASSOC);
+    
+    if ($return){
+        echo json_encode($return);
+        echo "\nLogged in as $user!";
+    } else {
+        echo "\nThis user does not exist!";
+    }
+} catch(Exception $e) {
+    echo "Something went wrong!";
 }
+

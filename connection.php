@@ -8,7 +8,7 @@ $pass = "";
 
 try {
     $connection = new PDO("mysql:host=$domain;dbname=$database", $user, $pass);
-    echo "Connection established";
+    echo "Connection established\n";
 } catch (PDOException $e){
-    echo "Connection failed";
+    echo "Connection failed\n";
 }

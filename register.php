@@ -18,7 +18,7 @@ try {
 
         echo "\nUser registered!";
     }
-} catch(Exception $e) {
+} catch(Throwable $e) {
     echo "Something went wrong!";
 }
 

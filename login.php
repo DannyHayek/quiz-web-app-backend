@@ -17,7 +17,7 @@ try {
     } else {
         echo "\nThis user does not exist!";
     }
-} catch(Exception $e) {
+} catch(Throwable $e) {
     echo "Something went wrong!";
 }
 

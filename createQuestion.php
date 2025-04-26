@@ -14,7 +14,8 @@ $question_data = $_POST["question_data"];
 $question_id = null;
 
 $answers = explode(",", $_POST["answers"]);  // Takes as many answers are needed divided by commas, then explodes them into an array to be used later
-$correct = $_POST["correct"];
+$correct_index = $_POST["correct_index"];
+$correct_id = null;
 
 
 try {
@@ -74,9 +75,28 @@ try {
 
             echo "\nCreating answers...";
 
-            // Add correct answer ID to question
-            
+            // Fetching correct answer ID
+            $query = $connection->prepare("SELECT answer_id FROM answers WHERE answer = :correct");
 
+            $query->bindParam(":correct", $answers[$correct_index], PDO::PARAM_STR);
+
+            $query->execute();
+
+            $correct_id = $query->fetch(PDO::FETCH_ASSOC)["answer_id"];
+
+            echo "\nCorrect answer ID: $correct_id";
+
+            // Assigning correct answer ID to question
+            $query = $connection->prepare("UPDATE questions SET correct_answer_id = :correct_id WHERE question_id = :question_id");
+
+            $query->bindParam(":correct_id", $correct_id, PDO::PARAM_INT);
+            $query->bindParam(":question_id", $question_id, PDO::PARAM_INT);
+
+            $query->execute();
+
+            echo "\nAssigning correct answer ID to question...";
+
+            echo "\nQuestion and answers succesfully created!";
         }
 
     } else {

@@ -1,12 +1,11 @@
 <?php
 
-// UPDATE questions SET question_data = "When was the latest World Cup?" WHERE question_id = (SELECT question_id FROM questions WHERE question_data = "When was the most recent World Cup?");
-
 include "./connection.php";
 
 
 $question_data = $_POST["question_data"];
 $new_question = $_POST["new_question"];
+$correct_id = $_POST["correct_id"];
 
 
 try {
@@ -25,6 +24,16 @@ try {
         $query->bindParam(":new_question", $new_question, PDO::PARAM_STR);
 
         $query->execute();
+
+        if ($correct_id != null) {
+            $query = $connection->prepare("UPDATE questions SET correct_answer_id = :correct_id WHERE question_id = $question_id");
+
+            $query->bindParam(":correct_id", $correct_id, PDO::PARAM_INT);
+
+            $query->execute();
+
+            echo "\nCorrect answer ID updated!";
+        }
 
         echo "\nQuestion updated!";
     } else {

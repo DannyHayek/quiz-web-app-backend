@@ -14,6 +14,7 @@ $question_data = $_POST["question_data"];
 $question_id = null;
 
 $answers = explode(",", $_POST["answers"]);  // Takes as many answers are needed divided by commas, then explodes them into an array to be used later
+$correct = $_POST["correct"];
 
 
 try {
@@ -41,6 +42,14 @@ try {
             echo "\nQuestion ($question_data) already exists!";
         } else {
             echo "\nQuestion does not exist! Creating question...";
+
+            $query = $connection->prepare("INSERT INTO questions (question_data, quiz_id) VALUES (:question_data, :quiz_id)");
+
+            $query->bindParam(":question_data", $question_data, PDO::PARAM_STR);
+            $query->bindParam(":quiz_id", $quiz_id, PDO::PARAM_INT);
+
+            $query->execute();
+
         }
 
     } else {

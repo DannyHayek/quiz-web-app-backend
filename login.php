@@ -7,9 +7,14 @@ $pass = $_POST["pass"];
 
 try {
 
-    $sql = $connection->query("SELECT * FROM users WHERE username = $user AND password = $pass");
+    $query = $connection->prepare("SELECT * FROM users WHERE username = :user AND password = :pass");
 
-    $return = $sql->fetch(PDO::FETCH_ASSOC);
+    $query->bindParam(":user", $user, PDO::PARAM_STR);
+    $query->bindParam(":pass", $pass, PDO::PARAM_STR);
+
+    $query->execute();
+
+    $return = $query->fetch(PDO::FETCH_ASSOC);
     
     if ($return){
         echo json_encode($return);
@@ -18,6 +23,6 @@ try {
         echo "\nThis user does not exist!";
     }
 } catch(Throwable $e) {
-    echo "Something went wrong!";
+    echo $e;
 }
 

@@ -1,26 +1,39 @@
-INSERT INTO quizzes (topic, total_score, quiz_description) VALUES ("Sports", 3, "A Quiz About Sports");
 
 <?php
 
+// INSERT INTO quizzes (topic, total_score, quiz_description) VALUES ("Sports", 3, "A Quiz About Sports")
+
+
 include "./connection.php";
 
-$user = $_POST["user"];
-$pass = $_POST["pass"];
+$topic = $_POST["topic"];
+$score = $_POST["score"];
+$description = $_POST["description"];
 
 try {
 
-    $sql = $connection->query("SELECT username FROM users WHERE username = $user");
+    $query = $connection->prepare("SELECT topic FROM quizzes WHERE topic = :topic");
 
-    $return = $sql->fetch(PDO::FETCH_ASSOC);
+    $query->bindParam(":topic", $topic, PDO::PARAM_STR);
+
+    $query->execute();
+
+    $return = $query->fetch(PDO::FETCH_ASSOC);
     
     if ($return){
-        echo "\n$user already exists!";
+        echo "\n$topic quiz already exists!";
     } else {
-        $sql = $connection->query("INSERT INTO users (username, password) VALUES ($user, $pass)");
+        $query = $connection->prepare("INSERT INTO quizzes (topic, total_score, quiz_description) VALUES (:topic, :score, :description)");
 
-        echo "\nUser registered!";
+        $query->bindParam(":topic", $topic, PDO::PARAM_STR);
+        $query->bindParam(":score", $score, PDO::PARAM_INT);
+        $query->bindParam(":description", $description, PDO::PARAM_STR);
+
+        $query->execute();
+
+        echo "\nQuiz created!";
     }
 } catch(Throwable $e) {
-    echo "Something went wrong!";
+    echo $e;
 }
 

@@ -4,9 +4,9 @@ include "./connection.php";
 
 try {
     $test = array();
-    $sql = $connection->query("SELECT * FROM quizzes");
+    $query = $connection->query("SELECT * FROM quizzes");
 
-    while($return = $sql->fetch(PDO::FETCH_ASSOC)) {
+    while($return = $query->fetch(PDO::FETCH_ASSOC)) {
         $test[] = $return;
     }
     

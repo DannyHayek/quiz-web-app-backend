@@ -2,33 +2,43 @@
 
 include "./connection.php";
 
-$quizID = $_POST["quizID"];
+$newTopic = null;
+
 $topic = $_POST["topic"];
+$newTopic = $_POST["newTopic"];
 $score = $_POST["score"];
 $description = $_POST["description"];
 
 try {
 
-    $query = $connection->prepare("SELECT topic FROM quizzes WHERE quiz_id = :quizID");
+    $query = $connection->prepare("SELECT topic FROM quizzes WHERE topic = :topic");
 
-    $query->bindParam(":quizID", $quizID, PDO::PARAM_INT);
+    $query->bindParam(":topic", $topic, PDO::PARAM_STR);
 
     $query->execute();
 
     $return = $query->fetch(PDO::FETCH_ASSOC);
     
     if ($return){
-        $query = $connection->prepare("UPDATE quizzes SET quiz_description = :description, topic = :topic, total_score = :score WHERE quiz_id = :quizID");
+        if ($newTopic == null) {
+            $query = $connection->prepare("UPDATE quizzes SET quiz_description = :description, topic = :topic, total_score = :score WHERE topic = :topic");
 
-        // UPDATE quizzes SET quiz_description = "A quiz about sports", topic = "World Sports" WHERE quiz_id = 6;
+            $query->bindParam(":topic", $topic, PDO::PARAM_STR);
+            $query->bindParam(":score", $score, PDO::PARAM_INT);
+            $query->bindParam(":description", $description, PDO::PARAM_STR);
+    
+            $query->execute();
+        } else {
+            $query = $connection->prepare("UPDATE quizzes SET quiz_description = :description, topic = :newTopic, total_score = :score WHERE topic = :topic");
 
-        $query->bindParam(":quizID", $quizID, PDO::PARAM_INT);
-        $query->bindParam(":topic", $topic, PDO::PARAM_STR);
-        $query->bindParam(":score", $score, PDO::PARAM_INT);
-        $query->bindParam(":description", $description, PDO::PARAM_STR);
+            $query->bindParam(":topic", $topic, PDO::PARAM_STR);
+            $query->bindParam(":newTopic", $newTopic, PDO::PARAM_STR);
+            $query->bindParam(":score", $score, PDO::PARAM_INT);
+            $query->bindParam(":description", $description, PDO::PARAM_STR);
 
-        $query->execute();
-
+            $query->execute();
+        }
+        
         echo "\nQuiz updated!";
         
     } else {

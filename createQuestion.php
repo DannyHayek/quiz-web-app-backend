@@ -29,19 +29,22 @@ try {
     if ($quiz_id){
         echo "\n$topic quiz exists! Quiz ID: $quiz_id.";
 
-        // $query = $connection->prepare("INSERT INTO quizzes (topic, total_score, quiz_description) VALUES (:topic, :score, :description)");
+        $query = $connection->prepare("SELECT question_id FROM questions WHERE question_data = :question_data");
 
-        // $query->bindParam(":topic", $topic, PDO::PARAM_STR);
-        // $query->bindParam(":score", $score, PDO::PARAM_INT);
-        // $query->bindParam(":description", $description, PDO::PARAM_STR);
+        $query->bindParam(":question_data", $question_data, PDO::PARAM_STR);
 
-        // $query->execute();
+        $query->execute();
 
-        
+        $return = $query->fetch(PDO::FETCH_ASSOC);
+
+        if ($return) {
+            echo "\nQuestion ($question_data) already exists!";
+        } else {
+            echo "\nQuestion does not exist! Creating question...";
+        }
+
     } else {
-
-
-        echo "\Quiz does not exist! Please select a valid quiz or create a new one!";
+        echo "\nQuiz does not exist! Please select a valid quiz or create a new one!";
     }
 } catch(Throwable $e) {
     echo $e;

@@ -1,10 +1,5 @@
 <?php
 
-// INSERT INTO questions (question_data, quiz_id) VALUES ("When was the most recent World Cup?", 6);
-// INSERT INTO answers (answer, question_id) VALUES (2022, (SELECT question_id FROM questions WHERE question_data = "When was the most recent World Cup?")), (2020, (SELECT question_id FROM questions WHERE question_data = "When was the most recent World Cup?")), (2018, (SELECT question_id FROM questions WHERE question_data = "When was the most recent World Cup?")), (2016, (SELECT question_id FROM questions WHERE question_data = "When was the most recent World Cup?"));
-// UPDATE questions SET correct_answer_id = (SELECT answer_id FROM answers WHERE answer = 2022) WHERE question_id = (SELECT question_id FROM questions WHERE question_data = "When was the most recent World Cup?");
-
-
 include "./connection.php";
 
 $topic = $_POST["topic"];

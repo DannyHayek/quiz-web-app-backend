@@ -1,8 +1,4 @@
-
 <?php
-
-// INSERT INTO quizzes (topic, total_score, quiz_description) VALUES ("Sports", 3, "A Quiz About Sports")
-
 
 include "./connection.php";
 

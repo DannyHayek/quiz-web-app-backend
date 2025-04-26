@@ -1,11 +1,11 @@
 <?php
 
-$user = $_GET["user"];
-$pass = $_GET["pass"];
+$answers = $_POST["answers"];
 
-$array = [
-    "user" => $user,
-    "pass" => $pass,
-];
+$array = explode(",", $answers);
 
 echo json_encode($array);
+
+foreach ($array as $a) {
+    echo $a;
+}

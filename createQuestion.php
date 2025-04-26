@@ -43,12 +43,39 @@ try {
         } else {
             echo "\nQuestion does not exist! Creating question...";
 
+            // Creating the question
             $query = $connection->prepare("INSERT INTO questions (question_data, quiz_id) VALUES (:question_data, :quiz_id)");
 
             $query->bindParam(":question_data", $question_data, PDO::PARAM_STR);
             $query->bindParam(":quiz_id", $quiz_id, PDO::PARAM_INT);
 
             $query->execute();
+
+            // Fetching the question_id of new question
+            $query = $connection->prepare("SELECT question_id FROM questions WHERE question_data = :question_data");
+
+            $query->bindParam(":question_data", $question_data, PDO::PARAM_STR);
+
+            $query->execute();
+
+            $question_id = $query->fetch(PDO::FETCH_ASSOC)["question_id"];
+
+            echo "\nNew question ID: $question_id";
+
+            // Creating the answers for the question by iterating over answers array and inserting each answer
+            foreach ($answers as $a) {
+                $query = $connection->prepare("INSERT INTO answers (answer, question_id) VALUES (:answer, :question_id)");
+
+                $query->bindParam(":answer", $a, PDO::PARAM_STR);
+                $query->bindParam(":question_id", $question_id, PDO::PARAM_INT);
+
+                $query->execute();
+            }
+
+            echo "\nCreating answers...";
+
+            // Add correct answer ID to question
+            
 
         }
 
